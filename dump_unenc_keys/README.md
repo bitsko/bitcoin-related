@@ -10,3 +10,5 @@ Tested with Python 3 only. Will NOT work on Python 2
 requires: ecdsa base58 libraries (pip3 install ecdsa base58)
 
 Usage: python3 dump_unenc_keys.py unencrypted_wallet.dat
+
+#https://github.com/HardCorePawn/dump_unenc_keys
