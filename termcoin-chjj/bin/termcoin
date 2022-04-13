@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+
+/**
+ * termcoin - a bitcoin wallet for your terminal
+ * Copyright (c) 2014, Christopher Jeffrey. (MIT Licensed)
+ * https://github.com/chjj/termcoin
+ */
+
+var termcoin = require('../');
+
+/**
+ * Title
+ */
+
+process.title = 'termcoin';
+
+/**
+ * Execute
+ */
+
+termcoin.main(function(err) {
+  if (err) throw err;
+  return process.exit(0);
+});

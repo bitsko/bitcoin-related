@@ -1,0 +1,23 @@
+{
+  "name": "termcoin",
+  "description": "A bitcoin wallet for your terminal.",
+  "author": "Christopher Jeffrey",
+  "version": "0.0.8",
+  "main": "./lib/index.js",
+  "bin": "./bin/termcoin",
+  "man": "./man/termcoin.1",
+  "preferGlobal": true,
+  "repository": "git://github.com/chjj/termcoin.git",
+  "homepage": "https://github.com/chjj/termcoin",
+  "bugs": { "url": "http://github.com/chjj/termcoin/issues" },
+  "keywords": ["bitcoin", "tui", "terminal", "curses", "blessed"],
+  "tags": ["bitcoin", "tui", "terminal", "curses", "blessed"],
+  "scripts": { "test": "node test" },
+  "dependencies": {
+    "blessed": ">= 0.0.37",
+    "coined": ">= 0.0.5"
+  },
+  "devDependencies": {
+    "rimraf": "2.2.8"
+  }
+}
