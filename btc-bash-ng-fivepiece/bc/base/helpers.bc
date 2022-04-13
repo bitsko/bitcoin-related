@@ -1,0 +1,118 @@
+#!/usr/bin/bc
+
+# some basic useful functions
+
+define max(a, b){
+
+    if ( a > b ){
+        return a
+    } else {
+        return b
+    }
+}
+
+define min(a, b){
+
+    if ( a < b ){
+        return a
+    } else {
+        return b
+    }
+}
+
+define void left_pad(n, len){
+
+    auto i;
+    i = wordlen(n);
+
+    while ( len-i >= 1F ){
+
+        print "0000000000000000000000000000000";
+        i += 1F;
+    }
+
+    while ( len-i >= F ){
+
+        print "000000000000000";
+        i += F;
+    }
+
+    while ( len-i >= 7 ){
+
+        print "0000000";
+        i += 7;
+    }
+
+    while ( len-i >= 3 ){
+
+        print "000";
+        i += 3;
+    }
+
+    while ( len-i >= 1 ){
+
+        print "0";
+        i += 1;
+    }
+
+    n;
+}
+
+define right_pad(n, len){
+
+    return n*10^(len-wordlen(n));
+}
+
+define ecdsa_sig2der(r, s){
+
+    auto lenr, bigr, lens, bigs, dersig, siglen;
+
+    lenr = bytelen(r);
+    lens = bytelen(s);
+
+    if ( r > 7F && (r / (100 ^ (lenr - 1)) > 7F) ){
+        bigr = 1;
+    }
+    if ( s > 7F && (s / (100 ^ (lens - 1)) > 7F) ){
+        bigs = 1;
+    }
+    siglen = 2 + bigr + lenr + 2 + bigs + lens;
+    dersig = 3000 + siglen;
+    dersig *= 100;
+    dersig += 02;
+    dersig *= 100;
+    dersig += bigr + lenr;
+    if (bigr == 1){
+        dersig *= 100;
+    }
+    dersig *= 10 ^ (lenr * 2);
+    dersig += r;
+    dersig *= 100;
+    dersig += 02
+    dersig *= 100;
+    dersig += bigs + lens;
+    if (bigs == 1){
+        dersig *= 100;
+    }
+    dersig *= 10 ^ (lens * 2);
+    dersig += s;
+
+    return dersig;
+}
+
+define void ecdsa_der2sig(dersig, *sig[]){
+
+    auto lensig, size_dersig_bytes, lenr, r, lens, s, tmp;
+
+    size_dersig_bytes = bytelen(dersig);
+    lensig = dersig / (100 ^ (size_dersig_bytes - 2)) % 100;
+    if ((lensig + 2) < size_dersig_bytes){
+        dersig /= (100 ^ (size_dersig_bytes - lensig - 2));
+    }
+    lenr = dersig / (100 ^ (lensig - 2)) % 100;
+    lens = dersig / (100 ^ (lensig - 2 - lenr - 2)) % 100;
+
+    sig[1] = dersig % (100 ^ lens);
+    dersig /= (100 ^ (lens + 2));
+    sig[0] = dersig % (100 ^ lenr);
+}
