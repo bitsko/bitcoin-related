@@ -1,0 +1,28 @@
+{
+  "name": "electrum-ecies",
+  "version": "1.1.6",
+  "description": "Electrum ECIES js implement, encrypt/decrypt message in BIE1 format, like Electrum/Electron Tools -> Encrypt/decrypt message do.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monkeylord/electrum-ecies.git"
+  },
+  "keywords": [
+    "electrum",
+    "bitcoin",
+    "bsv",
+    "crypto",
+    "ecies"
+  ],
+  "author": "Liu Yiming (Monkeylord)",
+  "license": "BSD-2-Clause",
+  "unpkg": "ecies.js",
+  "bugs": {
+    "url": "https://github.com/monkeylord/electrum-ecies/issues"
+  },
+  "homepage": "https://github.com/monkeylord/electrum-ecies#readme"
+}
