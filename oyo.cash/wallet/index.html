@@ -1,0 +1,18 @@
+<html>
+<head>
+  <title>Oyo.cash - Wallet</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="/assets/js/wallet.js"></script>
+</head>
+<body>
+<script language='javascript'>
+  document.addEventListener("DOMContentLoaded", function() {
+    if (loggedViewMode() || loggedSpendMode()) {
+      window.location.href = '/wallet/home.html'
+    } else {
+      window.location.href = '/wallet/login.html'
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,701 @@
+<html>
+<head>
+  <title>Oyo.cash - Search results</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@pmitchev" />
+  <meta name="twitter:title" content="Oyo.cash - Search results" />
+  <meta name="twitter:description" content="Search result for content posted on the Bitcoin blockchain" />
+  <meta name="twitter:image" content="https://oyo.cash/assets/images/logo-large.png" />
+  <meta property="og:url" content="https://oyo.cash" />
+  <meta property="og:type"   content="website" />
+  <meta property="og:title" content="Oyo.cash - Search results" />
+  <meta property="og:description" content="Search result for content posted on the Bitcoin blockchain" />
+  <meta property="og:image" content="https://oyo.cash/assets/images/logo-large.png" />
+
+  <link rel="stylesheet" href="/assets/css/styles.css?150301">
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="bitcoin-address" content="1JFAFvfWZauvVWKFsFtVomEQrPAHqEr1X8">
+
+  <script src="/assets/js/loader.js"></script>
+  <script src="/assets/js/loadVars.js?200501"></script>
+  <script src="/assets/js/common.js"></script>
+  <script src="/assets/js/bob.js?200501"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.0/pikaday.min.js" integrity="sha256-+B1vOR24Jpk4oWE/+SWu7AxoQqrqDT4SF+12bixBdjw=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bchaddrjs@0.4.4/dist/bchaddrjs-0.4.4.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.8.0/css/pikaday.min.css" integrity="sha256-+RIb33VoW3hHdfmp0+G4FrGAxzlKBXiwo6thzduwZdU=" crossorigin="anonymous" />
+</head>
+<body>
+  <noscript>Search result for content posted on the Bitcoin SV blockchain</noscript>
+  <div id="app" class="container">
+    <div id="nav"></div>
+    <div class="grid">
+      <div class="s_results" id="loaded">
+        <div class="periodNav">
+          <div class="periodNavLeft">
+            From: <input type="text" name="startDateForm" id="startDateForm" title="Search date start" placeholder="YYYY-MM-DD" disabled/>
+            To: <input type="text" name="endDateForm" id="endDateForm" title="Search date end" placeholder="YYYY-MM-DD"/>
+          </div>
+          <div class="periodNavCenter">
+          </div>
+          <div class="periodNavRight">
+          </div>
+        </div>
+        <div class="n_results" id="resultsCount"></div>
+        <div class="l_results" id="resultsList">
+
+        </div>
+        <div class="page_number" id="pagination">
+        </div>
+      </div>
+      <div class="s_results" id="error">
+        <div class="n_results">
+          Error occured while loading. <a href="javascript:void(0)" onClick="window.location.reload();">Try again</a>
+        </div>
+      </div>
+      <div class="s_results" id="loading">
+        <div class="n_results">
+          Loading...
+        </div>
+      </div>
+    </div>
+    <div id="footer"></div>
+  </div>
+
+<script language='javascript'>
+  // initiate loading
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("error").style.display = "none";
+  document.getElementById("loaded").style.display = "none";
+
+  // populate search phrase
+  var searchText = atob(getUrlVars()["search"])
+  // populate offset
+  var offset = parseInt(getUrlVars()["offset"]) || 0
+
+  var matchPopulated = 0
+  var highlightArray = []
+  var orSearchArray = []
+  var andSearchArray = []
+  var resultAllItems = []
+  var resultLongestStrings = []
+  var resultConcatinatedStrings = []
+  var resultMatchingStrings = []
+  var resultOutIndex = []
+  var resultTapeIndex = []
+  var resultApps = []
+  var listBaseApps = []
+  var listMapApps = []
+  var listRunApps = []
+  var bitcomProtocols = {}
+  var nextDateSearchesCount = 0
+  var protocols = JSON.parse(window.protocols)
+  var picker = new Pikaday(
+  {
+      field: document.getElementById('endDateForm'),
+      firstDay: 1,
+      minDate: new Date(2009, 01, 03),
+      maxDate: new Date()
+  });
+
+  // populate period form
+  var periodInput = parseInt(getUrlVars()["period"]) || window.searchPeriodDefault
+  if (searchText.includes("period:")) {
+    let match = searchText.match(/(?:^|\s+)period:\s*(\S+)\s*/u)
+    if (match && match[1]) {
+      periodInput = parseInt(match[1])
+    }
+  } else {
+    periodInput = window.searchPeriodDefault
+  }
+
+  // populate date form
+  var endTimestamp, dateForm
+  if (searchText.includes("datetime:")) {
+    let match = searchText.match(/(?:^|\s+)datetime:\s*(\S+)\s*/u)
+    if (match && match[1]) {
+      let endDate = new Date(Date.UTC(match[1].substring(0,4), parseInt(match[1].substring(4,6)) - 1, match[1].substring(6,8), match[1].substring(8,10), match[1].substring(10,12), 59, 0))
+      endTimestamp = parseInt(endDate.getTime() / 1000) + 1
+      dateForm = endDate.toISOString().substring(0, 10)
+    }
+  } else {
+    endTimestamp = parseInt(new Date().getTime() / 1000)
+    dateForm = new Date().toISOString().substring(0, 10)
+  }
+  var searchEndTimestamp = endTimestamp
+  document.getElementById('endDateForm').value = dateForm
+  var startDateTimestamp = endTimestamp - (periodInput * 24 * 60 * 60)
+  var startDateForm = new Date(startDateTimestamp * 1000).toISOString().substring(0, 10)
+  document.getElementById('startDateForm').value = startDateForm
+
+  function highlight(inputText, textArray) {
+    inputText = inputText.replace(/[\x26\x0A\x3c\x3e\x22\x27]/g, function(r) {
+  	   return "&#" + r.charCodeAt(0) + ";";
+    });
+    textArray.forEach(function(value, key) {
+      inputText = inputText.replace(new RegExp(value, 'gi'), '<span class="highlightedText">$&</span>')
+    })
+    return inputText
+  }
+
+  var changeSearchEndDate = function(date) {
+    if (date.length !== 10) {
+      return
+    }
+    dateInput = date.substring(0,4) + date.substring(5,7) + date.substring(8,10) + "2359"
+    searchText = searchText.replace(/(?:^|\s+)datetime:\s*\S+\s*/gu, ' ')
+    searchText += " datetime: " + dateInput
+    changeSearchRoute(searchText, 0)
+  }
+
+  var unixTimeToDatetime = function (unix_timestamp) {
+    let a = new Date(parseInt(unix_timestamp) * 1000)
+    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    let year = a.getFullYear()
+    let month = months[a.getMonth()]
+    let date = a.getDate()
+    let hour = ('0' + a.getHours()).substr(-2)
+    let min = ('0' + a.getMinutes()).substr(-2)
+    let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min
+    return time
+  }
+
+  var findText = function (item, itemIndex) {
+    let outIndex = ''
+    let tapeIndex = ''
+    let cellIndex = ''
+    let outIndexBackup = ''
+    let tapeIndexBackup = ''
+    let cellIndexBackup = ''
+    let outIndexBackup2 = ''
+    let tapeIndexBackup2 = ''
+    let cellIndexBackup2 = ''
+    let resultString = ''
+    let resultStringBackup = ''
+    let largestString = ''
+
+    for (let index = 0; index < item.out.length; ++index) {
+      for (let tIndex = 0; tIndex < item.out[index].tape.length; ++tIndex) {
+        for (let cIndex = 0; cIndex < item.out[index].tape[tIndex].cell.length; ++cIndex) {
+          let varName = 'item.out[index].tape[tIndex].cell[cIndex].s'
+          if (item.out[index].tape[tIndex].cell[cIndex].s !== undefined && typeof eval(varName) !== 'undefined') {
+            if (orSearchArray.some(oItem => eval(varName).toLowerCase().includes(oItem))) {
+              if (andSearchArray.every(aItem => eval(varName).toLowerCase().includes(aItem))) {
+                if (resultString.length <= eval(varName).length) {
+                  resultString = eval(varName)
+                  outIndex = index
+                  tapeIndex = tIndex
+                  cellIndex = cIndex
+                }
+                if (largestString.length <= eval(varName).length) {
+                  largestString = eval(varName)
+                  outIndexBackup = index
+                  tapeIndexBackup = tIndex
+                  outIndexBackup = cIndex
+                }
+              }
+            }
+            // Store in case no match is found
+            if (largestString.length <= eval(varName).length) {
+              if (/^[\x00-\xFF\u2000-\u20FF\u0400-\u04FF\u0600-\u06FF\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]+$/.test(eval(varName))) {
+                largestString = eval(varName)
+                outIndexBackup = index
+                tapeIndexBackup = tIndex
+                cellIndexBackup = cIndex
+              }
+            }
+            // Backup string
+
+            if (andSearchArray.some(aItem2 => eval(varName).toLowerCase().includes(aItem2))) {
+              if (resultString.length < eval(varName).length) {
+                outIndexBackup2 = index
+                tapeIndexBackup2 = tIndex
+                outIndexBackup2 = cIndex
+                resultStringBackup = eval(varName)
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (resultString === '') {
+      outIndex = outIndexBackup2
+      tapeIndex = tapeIndexBackup2
+      cellIndex = cellIndexBackup2
+      resultString = resultStringBackup
+    }
+
+    if (resultString) {
+      resultMatchingStrings[itemIndex] = resultString
+    } else {
+      resultMatchingStrings[itemIndex] = largestString
+    }
+    if (outIndex === '' || tapeIndex === '' || cellIndex === '') {
+      resultOutIndex[itemIndex] = outIndexBackup
+      resultTapeIndex[itemIndex] = tapeIndexBackup
+    } else {
+      resultOutIndex[itemIndex] = outIndex
+      resultTapeIndex[itemIndex] = tapeIndex
+    }
+    if (resultOutIndex[itemIndex] === '') {
+      resultOutIndex[itemIndex] = 0
+      resultTapeIndex[itemIndex] = 0
+    }
+
+    resultLongestStrings[itemIndex] = largestString
+  }
+
+  var getLink = function (item, outIndex, tapeIndex, index) {
+    let link = window.oyoProDefaultLink
+    //replace {tx_hash}
+    link = link.replace("{tx_hash}", item.tx.h)
+    return link
+  }
+
+  var getTitle = function (item, outIndex, tapeIndex) {
+    let title = ''
+    let titleArray = []
+    if (protocols[item.out[outIndex].tape[tapeIndex].cell[0].b] && protocols[item.out[outIndex].tape[tapeIndex].cell[0].b].title) {
+      titleArray = protocols[item.out[outIndex].tape[tapeIndex].cell[0].b].title
+    } else if (protocols[item.out[outIndex].tape[tapeIndex].cell[0].s] && protocols[item.out[outIndex].tape[tapeIndex].cell[0].s].title) {
+      titleArray = protocols[item.out[outIndex].tape[tapeIndex].cell[0].s].title
+    }
+    for (let i = 0; i < titleArray.length; ++i) {
+      if (titleArray[i].startsWith("var:")) {
+        let tmpTitle = titleArray[i].replace(/^var:/g, '')
+        tmpTitle = tmpTitle.replace(/\?/g, outIndex)
+        title += eval('item.' + tmpTitle)
+      } else {
+        title += titleArray[i]
+      }
+    }
+    return title
+  }
+
+  var convertToTitle = function (text) {
+    let resultString = text.split(' ')[0]
+    if (text.includes(' ')) {
+      resultString = resultString + ' ' + text.substr(text.indexOf(' ') + 1).split(/[.|:|;|-|!|?|<|&|(|)]+\s+/).slice(0, 1).join(' ').split(/\s+http/).slice(0, 1).join(' ').split(/\<br/).slice(0, 1).join(' ')
+    }
+    return resultString
+  }
+
+  var getProtocolName = function (item, outIndex, tapeIndex) {
+    let name = ''
+    if (protocols[item.out[outIndex].tape[tapeIndex].cell[0].b] && protocols[item.out[outIndex].tape[tapeIndex].cell[0].b].name) {
+      name = protocols[item.out[outIndex].tape[tapeIndex].cell[0].b].name
+    } else if (protocols[item.out[outIndex].tape[tapeIndex].cell[0].s] && protocols[item.out[outIndex].tape[tapeIndex].cell[0].s].name) {
+      name = protocols[item.out[outIndex].tape[tapeIndex].cell[0].s].name
+    }
+    return name
+  }
+
+  var computeSearchArray = function() {
+    let tmpSearchText = searchText
+    while (tmpSearchText.match(/s(?:[1-9]|1[0-5]):\s*(\S+)\s*/u)) {
+      let match = tmpSearchText.match(/(?:^|\s+)s([1-9]|1[0-5]):\s*(\S+)\s*/u)
+      if (match && match[1] && match[2]) {
+        let regex = new RegExp( '(?:^|\\s+)s' + match[1] + ':\\s*\\S+\\s*', 'gu' )
+        tmpSearchText = tmpSearchText.replace(regex, ' ')
+      }
+    }
+    while (tmpSearchText.match(/(?:^|\s+)h([1-9]|1[0-5]):\s*([0-9a-fA-F]+)\s*/u)) {
+      let match = tmpSearchText.match(/(?:^|\s+)h([1-9]|1[0-5]):\s*([0-9a-fA-F]+)\s*/u)
+      if (match && match[1] && match[2]) {
+        let regex = new RegExp( '(?:^|\\s+)h' + match[1] + ':\\s*[0-9a-fA-F]+\\s*', 'gu' )
+        tmpSearchText = tmpSearchText.replace(regex, ' ')
+      }
+    }
+    while (tmpSearchText.match(/(?:^|\s+)b([1-9]|1[0-5]):\s*((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)\s*/u)) {
+      let match = tmpSearchText.match(/(?:^|\s+)b([1-9]|1[0-5]):\s*((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)\s*/u)
+      if (match && match[1] && match[2]) {
+        let regex = new RegExp( '(?:^|\\s+)b' + match[1] + ':\\s*(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?\\s*', 'gu' )
+        tmpSearchText = tmpSearchText.replace(regex, ' ')
+      }
+    }
+    if (tmpSearchText.includes("prefix:")) {
+      tmpSearchText = tmpSearchText.replace(/(?:^|\s+)prefix:\s*\S+\s*/gu, ' ')
+    }
+    if (tmpSearchText.includes("from:")) {
+      tmpSearchText = tmpSearchText.replace(/(?:^|\s+)from:\s*\S+\s*/gu, ' ')
+    }
+    if (tmpSearchText.includes("notfrom:")) {
+      tmpSearchText = tmpSearchText.replace(/(?:^|\s+)notfrom:\s*\S+\s*/gu, ' ')
+    }
+    if (tmpSearchText.includes("datetime:")) {
+      tmpSearchText = tmpSearchText.replace(/(?:^|\s+)datetime:\s*\S+\s*/gu, ' ')
+    }
+    if (tmpSearchText.includes("period:")) {
+      tmpSearchText = tmpSearchText.replace(/(?:^|\s+)period:\s*\S+\s*/gu, ' ')
+    }
+    tmpSearchText = tmpSearchText.trim()
+
+    andSearchArray = []
+    let pattern = /"(.*?)"/gu;
+    let current;
+    while(current = pattern.exec(tmpSearchText)) {
+      andSearchArray.push(current[1].toLowerCase())
+    }
+    pattern = /'(.*?)'/gu;
+    while(current = pattern.exec(tmpSearchText)) {
+      andSearchArray.push(current[1].toLowerCase())
+    }
+
+    orSearchArray = []
+    tmpSearchText = tmpSearchText.replace(/["',!?]/giu, '')
+    orSearchArray = tmpSearchText.toLowerCase().split(' ')
+    let orSearchArrayTmp = orSearchArray
+    for (let orSIndex = 0; orSIndex < orSearchArrayTmp.length; ++orSIndex) {
+      if (orSearchArrayTmp[orSIndex].endsWith('s') || orSearchArrayTmp[orSIndex].endsWith('ing')) {
+        let rootString = orSearchArrayTmp[orSIndex].replace(/ings|ing|s$/gi, '')
+        if(orSearchArray.indexOf(rootString) === -1) {
+          orSearchArray.push(rootString)
+        }
+        if(orSearchArray.indexOf(rootString + 's') === -1) {
+          orSearchArray.push(rootString + 's')
+        }
+        if(orSearchArray.indexOf(rootString + 'ing') === -1) {
+          orSearchArray.push(rootString + 'ing')
+        }
+        if(orSearchArray.indexOf(rootString + 'ings') === -1) {
+          orSearchArray.push(rootString + 'ings')
+        }
+      }
+    }
+
+    highlightArray = andSearchArray.concat(orSearchArray)
+  }
+
+  var searchTheBlockchainForText = function(beginTimestamp, endTimestamp) {
+    if (endTimestamp === undefined) {
+      endTimestamp = parseInt(new Date().getTime() / 1000)
+    }
+    if (beginTimestamp === undefined) {
+      beginTimestamp = beginTimestamp || endTimestamp - (window.searchPeriod * 24 * 60 * 60)
+    }
+
+    let queryMatch = searchQueryCreator(searchText, beginTimestamp, endTimestamp)
+    let query = {
+      'q': {
+        'find': queryMatch,
+        'skip': parseInt(offset),
+        'limit': window.resultsPerPage,
+        'sort': { 'blk.i': -1 }
+      }
+    }
+
+    let fetchParams = {
+      method: "post",
+      headers: {
+        'Content-type': 'application/json; charset=utf-8',
+        'token': window.planariaToken,
+        "format": "json"
+      },
+      body: JSON.stringify(query)
+    }
+
+    var fetchResponse = ""
+    const decoder = new TextDecoder('utf-8');
+
+    fetch(window.bobNode, fetchParams)
+    // Retrieve its body as ReadableStream
+    .then(response => response.body)
+    .then(rs => {
+      const reader = rs.getReader();
+
+      return new ReadableStream({
+        async start(controller) {
+          while (true) {
+            const { done, value } = await reader.read();
+
+            if (value) {
+              var decoded = decoder.decode(value);
+              fetchResponse = fetchResponse.concat(decoded);
+            }
+
+            // When no more data needs to be consumed, break the reading
+            if (done) {
+              resultAllItems = JSON.parse(fetchResponse)
+              consumeItems(beginTimestamp, endTimestamp)
+              break;
+            }
+
+            // Enqueue the next data chunk into our target stream
+            controller.enqueue(value);
+          }
+
+          // Close the stream
+          controller.close();
+          reader.releaseLock();
+        }
+      })
+    })
+    .catch(error => {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("error").style.display = "block";
+      document.getElementById("loaded").style.display = "none";
+      console.log(error)
+    })
+  }
+
+  var consumeItems = function (beginTimestamp, endTimestamp) {
+    for (let i = 0; i < resultAllItems.length; ++i) {
+      for (let ii = 0; ii < resultAllItems[i]['out'].length; ++ii) {
+        for (let iii = 0; iii < resultAllItems[i]['out'][ii]['tape'].length; ++iii) {
+          //populate listBaseApps
+          let prefix = resultAllItems[i]['out'][ii]['tape'][iii]['cell'][0].s
+          if (prefix !== undefined && !(listBaseApps.includes(prefix))) {
+            listBaseApps.push(prefix)
+          }
+          //populate BitcomPrefix
+          if (!(bitcomPrefixes.includes(prefix)) && protocols[prefix] === undefined) {
+            try {
+              bchaddr.isLegacyAddress(prefix)
+              bitcomPrefixes.push(prefix)
+            } catch (e) {
+            }
+          }
+
+          //populate MapApps
+          let thisOut = resultAllItems[i]['out'][ii]['tape'][iii]
+          if (thisOut['cell'][5] !== undefined && thisOut['cell'][5].s !== undefined && thisOut['cell'][4].s === 'app') {
+            resultApps[i] = thisOut['cell'][5].s
+          }
+          if (thisOut['cell'][7] !== undefined && thisOut['cell'][7].s !== undefined && thisOut['cell'][6].s === 'app') {
+            resultApps[i] = thisOut['cell'][7].s
+          }
+          if (thisOut['cell'][9] !== undefined && thisOut['cell'][9].s !== undefined && thisOut['cell'][8].s === 'app') {
+            resultApps[i] = thisOut['cell'][9].s
+          }
+          if (thisOut['cell'][11] !== undefined && thisOut['cell'][11].s !== undefined && thisOut['cell'][10].s === 'app') {
+            resultApps[i] = thisOut['cell'][11].s
+          }
+          if (thisOut['cell'][13] !== undefined && thisOut['cell'][13].s !== undefined && thisOut['cell'][12].s === 'app') {
+            resultApps[i] = thisOut['cell'][13].s
+          }
+          if (thisOut['cell'][15] !== undefined && thisOut['cell'][15].s !== undefined && thisOut['cell'][14].s === 'app') {
+            resultApps[i] = thisOut['cell'][15].s
+          }
+          if (thisOut['cell'][17] !== undefined && thisOut['cell'][17].s !== undefined && thisOut['cell'][16].s === 'app') {
+            resultApps[i] = thisOut['cell'][17].s
+          }
+          if (thisOut['cell'][19] !== undefined && thisOut['cell'][19].s !== undefined && thisOut['cell'][18].s === 'app') {
+            resultApps[i] = thisOut['cell'][19].s
+          }
+          if (thisOut['cell'][21] !== undefined && thisOut['cell'][21].s !== undefined && thisOut['cell'][20].s === 'app') {
+            resultApps[i] = thisOut['cell'][21].s
+          }
+
+          //populate RunApps
+          if (thisOut['cell'][4] !== undefined && thisOut['cell'][4].s !== undefined && thisOut['cell'][2].s === 'run') {
+            resultApps[i] = thisOut['cell'][3].s
+          }
+        }
+      }
+    }
+    Promise.all([getBitcomProtocols()]).then(function(values) {
+      bitcomProtocols = values[0]
+
+      for (let key in bitcomProtocols) {
+        if (!bitcomProtocols.hasOwnProperty(key)) continue;
+        let bitcomProtocol = bitcomProtocols[key]
+        if (protocols[key] === undefined) {
+          let protocol = {}
+          if (bitcomProtocol['name'] !== undefined) {
+            protocol['name'] = bitcomProtocol['name']
+          }
+          if (protocol['name'] || protocol['link']) {
+            protocols[key] = protocol
+          }
+        }
+      }
+
+      populateResults(beginTimestamp, endTimestamp)
+    });
+  }
+
+  var populateResults = function(beginTimestamp, endTimestamp) {
+    if (resultAllItems.length === 0 && nextDateSearchesCount < 25) {
+      endTimestamp = endTimestamp - (periodInput * 24 * 60 * 60)
+      beginTimestamp = beginTimestamp - (periodInput * 24 * 60 * 60)
+
+      var startDateForm = new Date(beginTimestamp * 1000).toISOString().substring(0, 10)
+      document.getElementById('startDateForm').value = startDateForm
+
+      nextDateSearchesCount += 1
+      searchTheBlockchainForText(beginTimestamp, endTimestamp)
+      return
+    }
+
+    for (let i = 0; i < resultAllItems.length; i++) {
+      addListItem("resultsList", i, resultAllItems[i])
+    }
+
+    if (resultAllItems.length === 0) {
+      var textNode = document.createTextNode("No results found");
+      document.getElementById("resultsList").appendChild(textNode)
+    }
+
+    // populate pagination
+    pagination(resultAllItems.length, offset)
+
+    // show loaded
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("error").style.display = "none";
+    document.getElementById("loaded").style.display = "block";
+  }
+
+  var addListItem = function(parentElementId, index, item) {
+    findText(item, index)
+    var link = getLink(item, resultOutIndex[index], resultTapeIndex[index], index)
+    var title = getTitle(item, resultOutIndex[index], resultTapeIndex[index])
+    var itemDiv = document.createElement("div");
+    itemDiv.className = "s_result";
+    // row 1 content
+    var row1 = document.createElement("a");
+    row1.className = "title"
+    row1.setAttribute("href", link);
+    var textTitleNode = ""
+    var titleText = title
+    if (!titleText) {
+      titleText = convertToTitle(resultMatchingStrings[index])
+    }
+    titleText = highlight(titleText, highlightArray)
+    var textTitleNode = document.createElement('div');
+    textTitleNode.innerHTML = titleText
+    itemDiv.appendChild(row1).appendChild(textTitleNode);
+    // row 2 content
+    var row2 = document.createElement("div");
+    row2.className = "content"
+    var sUrlP = document.createElement("p");
+    sUrlP.className = "s_url"
+    var sUrlA = document.createElement("a");
+    sUrlA.setAttribute("href", link);
+    sUrlA.className = "s_url"
+    var greenText = item.tx.h
+    if (getProtocolName(item, resultOutIndex[index], resultTapeIndex[index])) {
+      greenText += " - " + getProtocolName(item, resultOutIndex[index], resultTapeIndex[index])
+    }
+    if (resultApps[index]) {
+      greenText += " " + resultApps[index]
+    }
+    var greenTextNode = document.createTextNode(greenText);
+    sUrlA.appendChild(greenTextNode);
+    itemDiv.appendChild(row2).appendChild(sUrlP).appendChild(sUrlA);
+
+    var sDetailOuterDiv = document.createElement("div");
+    var sDetail = document.createElement("p");
+    sDetail.className = "s_detail"
+    var timeSpan = document.createElement("span");
+    timeSpan.className = "date"
+    var dateText = "Unconfirmed - "
+    if (item.blk !== undefined) {
+      dateText = unixTimeToDatetime(item.blk.t) + " - "
+    }
+    var dateTextNode = document.createTextNode(dateText);
+    timeSpan.appendChild(dateTextNode);
+
+    resultLongestStrings[index] = highlight(resultLongestStrings[index], highlightArray)
+    var contentTextNode = document.createElement('div');
+    contentTextNode.innerHTML = resultLongestStrings[index]
+    sDetail.appendChild(timeSpan)
+    sDetail.appendChild(contentTextNode)
+    itemDiv.appendChild(row2).appendChild(sDetailOuterDiv).appendChild(sDetail)
+    document.getElementById(parentElementId).appendChild(itemDiv)
+  }
+
+
+  var pagination =  function(itemsNumber, offset) {
+    var paginationDiv = document.createElement("div");
+    paginationDiv.className = "pagination";
+
+    if (offset > 0) {
+      var a = document.createElement("a");
+      a.setAttribute("href", "/result/?search=" + btoa(searchText) + "&offset=" + (parseInt(offset) - window.resultsPerPage));
+      a.className = "page-item"
+      var linkTextNode = document.createTextNode("Previous");
+      a.appendChild(linkTextNode);
+      paginationDiv.appendChild(a);
+    }
+
+    if (itemsNumber > 0 && itemsNumber % window.resultsPerPage === 0) {
+      var a = document.createElement("a");
+      a.setAttribute("href", "/result/?search=" + btoa(searchText) + "&offset=" +  (parseInt(offset) + window.resultsPerPage));
+      a.className = "page-item"
+      var linkTextNode = document.createTextNode("Next");
+      a.appendChild(linkTextNode);
+      paginationDiv.appendChild(a);
+    }
+
+    if (itemsNumber % window.resultsPerPage !== 0) {
+      var endTimestamp = searchEndTimestamp
+      endTimestamp = endTimestamp - (periodInput * 24 * 60 * 60)
+      searchText = searchText.replace(/(?:^|\s+)datetime:\s*(\S+)\s*/u, "")
+      var endDate = new Date(endTimestamp * 1000).toISOString()
+      searchText = searchText + " datetime: " + endDate.substring(0, 4) + endDate.substring(5, 7) + endDate.substring(8, 10)
+       + endDate.substring(11, 13) + endDate.substring(14, 16)
+
+      var a = document.createElement("a");
+      a.setAttribute("href", "/result/?search=" + btoa(searchText) + "&offset=0");
+      a.className = "page-item"
+      var linkTextNode = document.createTextNode("Next");
+      a.appendChild(linkTextNode);
+      paginationDiv.appendChild(a);
+    }
+
+    document.getElementById("pagination").innerHTML = ""
+    document.getElementById("pagination").appendChild(paginationDiv)
+    return
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // on date change
+    document.getElementById('endDateForm').addEventListener("change", function() {
+      changeSearchEndDate(document.getElementById('endDateForm').value)
+    })
+    // on period button click
+    let periodButtons = document.getElementsByClassName('periodButton');
+    for(let i=0; i<periodButtons.length; i++){
+      if (parseInt(periodInput) === parseInt(periodButtons[i].value)) {
+        periodButtons[i].classList.add("active")
+      }
+      periodButtons[i].addEventListener("click", function() {
+        searchText = searchText.replace(/(?:^|\s+)period:\s*\S+\s*/gu, ' ')
+        searchText += " period: " + periodButtons[i].value
+        changeSearchRoute(searchText, 0)
+      })
+    }
+    // load partials
+    loadHead()
+    loadNav().then(function(r) {
+      navSearchPerformed()
+      document.getElementById('navSearchText').value = searchText;
+    })
+    loadFooter()
+
+    // populate results
+    computeSearchArray()
+    searchTheBlockchainForText()
+  })
+</script>
+</body>
+</html>
