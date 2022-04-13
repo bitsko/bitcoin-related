@@ -1,0 +1,38 @@
+Tue Sep  3 16:21:49 EDT 2019
+04807a98561938366c119ae5d1fee60872f676f30c08bbb6932a6bdc91acd464  /run/user/1000/work/hold
+Total number tries:  8
+
+real	0m0.054s
+user	0m0.055s
+sys	0m0.038s
+0098702d3e9b54c7e98811e37a6b901de4b31773224ac630c6fbe3140aa8a435  /run/user/1000/work/hold
+Total number tries:  68
+
+real	0m0.338s
+user	0m0.451s
+sys	0m0.169s
+000ee96b0e0b4e5fddd8c4ffd22e35882524e802ca701c786b720d415c512065  /run/user/1000/work/hold
+Total number tries:  7062
+
+real	0m33.344s
+user	0m42.896s
+sys	0m19.667s
+00003ec97716f7c49905c6b007c14f8374a707e7ecdc7d8071c7619fcb301cd2  /run/user/1000/work/hold
+Total number tries:  38561
+
+real	3m34.467s
+user	4m0.798s
+sys	1m52.963s
+000005532f152849c0363d97c29d5d423f08fd81603a8d2e1cd021259e4c2a43  /run/user/1000/work/hold
+Total number tries:  32927
+
+real	2m31.080s
+user	3m13.730s
+sys	1m18.821s
+000000411fb5e5eaf9f187f59ee79f3b8be47dd63935a712e3da08d714ff77fa  /run/user/1000/work/hold
+Total number tries:  8644473
+
+real	752m58.885s
+user	913m7.822s
+sys	454m12.881s
+

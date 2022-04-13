@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# testing nonce
+#
+# Use /run/user/$UID (memory)
+
+
+dir=/run/user/$UID/work
+mkdir -p $dir
+file=$dir/hold
+block1=$dir/block
+touch $file
+ln -fs $file block_with_nonce
+cp block $block1
+
+date
+
+function findit
+{
+g=0
+while true
+do
+cat $block1 > $file
+let g=g+1
+cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 >> $file
+#echo "$g "
+sha256sum $file | grep ^$1
+[[ $? -eq 0 ]] && echo "Total number tries: " $g && return 0
+done
+}
+
+time findit 0
+time findit 00
+time findit 000
+time findit 0000
+time findit 00000
+time findit 000000
+time findit 0000000
+time findit 00000000
+
+exit 0
