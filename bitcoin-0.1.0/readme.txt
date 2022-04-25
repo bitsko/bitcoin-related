@@ -1,3 +1,24 @@
+***
+
+
+For posterity and educational uses only - Extracted files from bitcoin-0.1.0.rar sent to Hal Finney dated 07Jan09 
+
+
+SHA256=91e2dfa2af043eabbb38964cbf368500 ec9ed4ccbc990eceb922ff0c4d71d1ad466990dd 
+ 
+
+forked from jmprcx/bitcoin-0.1.0
+
+https://github.com/jmprcx/bitcoin-0.1.0
+
+forked from Dan-McG/bitcoin-0.1.0 
+
+https://github.com/Dan-McG/bitcoin-0.1.0
+
+
+
+***
+
 BitCoin v0.01 ALPHA
 
 Copyright (c) 2009 Satoshi Nakamoto
