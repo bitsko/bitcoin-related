@@ -1,6 +1,8 @@
 # a fork of pointbiz/bitaddress.org
 JavaScript Client-Side Bitcoin Wallet Generator
 
+https://github.com/pointbiz/bitaddress.org
+
 Now Bitcoin addresses and their corresponding private key can be conveniently 
 generated in a web browser.
 
