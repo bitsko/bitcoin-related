@@ -22,6 +22,7 @@ if [ ! -d "$bdb_dir" ]; then
         echo -e "${RED}Downloading $bdburl...${NC}"
         wget -O $startdir/$bdbtargz $bdburl
     fi
+    echo "****************************************************************"
     echo -e "${BLUE}Installing Berkeley DB 5.3 to $startdir/$bdb_dir...${NC}"
     mkdir -p "$bdb_dir"
     echo -e "${CYAN}  - unpack $bdbtargz -> ${PWD##*/}/${bdb_dir}${NC}"
