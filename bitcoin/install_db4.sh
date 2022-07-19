@@ -245,6 +245,7 @@ cd build_unix/
 
 "${BDB_PREFIX}/${BDB_VERSION}/dist/configure" \
   --enable-cxx --disable-shared --disable-replication --with-pic --prefix="${BDB_PREFIX}" \
+  CC=clang CXX=clang++ CPP=clang-cpp
   "${@}"
 
 make install
