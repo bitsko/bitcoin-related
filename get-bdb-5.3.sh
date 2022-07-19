@@ -13,33 +13,30 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 startdir=$(pwd)
+bdb_dir="db5"
+bdbtargz="db5.tar.gz"
+bdbdlname="db-5.3.28.NC"
+bdburl="http://download.oracle.com/berkeley-db/${bdbdlname}.tar.gz"
+
 echo -e "\033[0;34mLogging to $startdir/log${NC}"
 if [ -f "log" ]; then rm log; fi
-bdb_dir="db5"
+
 if [ ! -d "$bdb_dir" ]; then
     mkdir -p "$bdb_dir"
-    bdbtargz="db5.tar.gz"
-    bdbdlname="db-5.3.28.NC"
     if [ ! -f "$startdir/$bdbtargz" ]; then
-        bdburl="http://download.oracle.com/berkeley-db/${bdbdlname}.tar.gz"
         echo -e "${RED}Downloading $bdburl...${NC}"
         wget -O $startdir/$bdbtargz $bdburl
-#        wget $bdburl
     fi
     echo -e "${BLUE}Installing Berkeley DB 5.3 to $startdir/$bdb_dir...${NC}"
     mkdir -p "$bdb_dir"
     echo -e "${CYAN}  - unpack $bdbtargz -> ${PWD##*/}/${bdb_dir}${NC}"
-#    gunzip "$bdbtargz"
     tar -zxvf "$bdbtargz" -s /${bdbdlname}/${bdb_dir}/ >>$startdir/log 2>&1
-#    cp -r ${bdbdlname} ${bdb_dir}
-#    tar -zxvf ${startdir}/${bdbtargz} -C "$bdb_dir" --strip-components=1 >>$startdir/log 2>&1
-    cd "${startdir}"/"${bdb_dir}"
-
     cd "${startdir}"/"${bdb_dir}"/build_unix
     mkdir -p build
     export BDB_PREFIX=$(pwd)/build
     echo -e "${CYAN}  - dist/configure${NC}"
-    ../dist/configure --disable-shared --disable-replication --enable-cxx --with-pic --prefix=$BDB_PREFIX >>$startdir/log 2>&1
+    ../dist/configure --disable-shared --disable-replication --enable-cxx --with-pic \
+    --prefix=$BDB_PREFIX CC=egcc CXX=eg++ CPP=ecpp >>$startdir/log 2>&1
     echo -e "${CYAN}  - install -> ${PWD##*/}/build${NC}"
     make install >>$startdir/log 2>&1
     cd ../..
