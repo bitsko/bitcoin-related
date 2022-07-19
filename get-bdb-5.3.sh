@@ -31,7 +31,7 @@ if [ ! -d "$bdb_dir" ]; then
     export BDB_PREFIX=$(pwd)/build
     echo -e "${CYAN}  - dist/configure${NC}"
     ../dist/configure --disable-shared --disable-replication --enable-cxx --with-pic \
-    --prefix="$BDB_PREFIX" CC=clang CXX=clang++ CPP=clang-gcc >>$startdir/log 2>&1
+    --prefix="$BDB_PREFIX" CC=egcc CXX=eg++ CPP=egcc >>$startdir/log 2>&1
     echo -e "${CYAN}  - install -> ${PWD##*/}/build${NC}"
     make install >>$startdir/log 2>&1
     cd ../..
