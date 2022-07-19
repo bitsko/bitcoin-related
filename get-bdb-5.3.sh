@@ -30,11 +30,11 @@ if [ ! -d "$bdb_dir" ]; then
     mkdir -p build
     export BDB_PREFIX=$(pwd)/build
     echo -e "${CYAN}  - dist/configure${NC}"
-    ../dist/configure --disable-pthreads --disable-shared --disable-replication --enable-cxx --with-pic \
-    --prefix="$BDB_PREFIX" MAKE=gmake CC=egcc CXX=eg++ CPP=ecpp >>$startdir/log 2>&1
+    ../dist/configure --disable-shared --disable-replication --enable-cxx --with-pic \
+    --prefix="$BDB_PREFIX" CC=clang++ CXX=eg++ CPP=clang-cpp >>$startdir/log 2>&1
     # CC=gcc CXX=g++ CPP=cpp
     echo -e "${CYAN}  - install -> ${PWD##*/}/build${NC}"
-    gmake install >>$startdir/log 2>&1
+    make install >>$startdir/log 2>&1
     cd ../..
     echo -e "${RED}Done.${NC}"
 else
