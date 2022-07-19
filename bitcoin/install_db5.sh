@@ -28,7 +28,7 @@ BDB_VERSION='db-5.3.28.NC'
 BDB_URL="https://download.oracle.com/berkeley-db/${BDB_VERSION}.tar.gz"
 
 mkdir -p "${BDB_PREFIX}"
-wget "${BDB_URL}" "${BDB_VERSION}.tar.gz" 
+wget "${BDB_URL}" # "${BDB_VERSION}.tar.gz" 
 tar -xzvf ${BDB_VERSION}.tar.gz -C "$BDB_PREFIX"
 cd "${BDB_PREFIX}/${BDB_VERSION}/"
 
