@@ -22,6 +22,7 @@ expand_path() {
 }
 
 BDB_PREFIX="$(expand_path "${1}")/db4"; shift;
+echo "${BDB_PREFIX}" > bdb.prefix
 BDB_VERSION='db-4.8.30.NC'
 BDB_HASH='12edc0df75bf9abd7f82f821795bcee50f42cb2e5f76a6a281b85732798364ef'
 BDB_URL="https://download.oracle.com/berkeley-db/${BDB_VERSION}.tar.gz"
