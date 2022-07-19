@@ -1,5 +1,6 @@
 #!/bin/sh
 # Copyright (c) 2017-2021 The Bitcoin Core developers
+# tampered with by bitsko
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -245,17 +246,18 @@ cd build_unix/
 
 "${BDB_PREFIX}/${BDB_VERSION}/dist/configure" \
   --enable-cxx --disable-shared --disable-replication --with-pic --prefix="${BDB_PREFIX}" \
-  CC=clang CXX=clang++ CPP=clang-cpp
+#  CC=clang CXX=clang++ CPP=clang-cpp
+   CC=egcc CXX=eg++ CPP=ecpp
   "${@}"
 
 make install
 
-echo
+echo "*******************"
 echo "db4 build complete."
-echo
+echo "*******************"
 # shellcheck disable=SC2016
-echo 'When compiling bitcoind, run `./configure` in the following way:'
-echo
-echo "  export BDB_PREFIX='${BDB_PREFIX}'"
+# echo 'When compiling bitcoind, run `./configure` in the following way:'
+# echo
+# echo "  export BDB_PREFIX='${BDB_PREFIX}'"
 # shellcheck disable=SC2016
-echo '  ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" ...'
+# echo '  ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" ...'
