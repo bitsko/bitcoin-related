@@ -1,8 +1,5 @@
 #!/bin/bash
-# Installs Berkeley DB 5.3.
-# BDB 5.3 is installed locally to a new bdb/ folder.
-# @author Jack Peterson (jack@tinybike.net)
-# tampered with by bitsko for OpenBSD testing
+# Installs Berkeley DB 5.3. # @author Jack Peterson (jack@tinybike.net) # tampered with by bitsko for OpenBSD testing
 
 set -e
 trap "exit" INT
@@ -17,10 +14,8 @@ bdb_dir="db5"
 bdbtargz="db5.tar.gz"
 bdbdlname="db-5.3.28.NC"
 bdburl="http://download.oracle.com/berkeley-db/${bdbdlname}.tar.gz"
-
 echo -e "\033[0;34mLogging to $startdir/log${NC}"
 if [ -f "log" ]; then rm log; fi
-
 if [ ! -d "$bdb_dir" ]; then
     mkdir -p "$bdb_dir"
     if [ ! -f "$startdir/$bdbtargz" ]; then
@@ -36,7 +31,7 @@ if [ ! -d "$bdb_dir" ]; then
     export BDB_PREFIX=$(pwd)/build
     echo -e "${CYAN}  - dist/configure${NC}"
     ../dist/configure --disable-shared --disable-replication --enable-cxx --with-pic \
-    --prefix=$BDB_PREFIX CC=egcc CXX=eg++ CPP=ecpp >>$startdir/log 2>&1
+    --prefix="$BDB_PREFIX" CC=egcc CXX=eg++ CPP=ecpp >>$startdir/log 2>&1
     echo -e "${CYAN}  - install -> ${PWD##*/}/build${NC}"
     make install >>$startdir/log 2>&1
     cd ../..
