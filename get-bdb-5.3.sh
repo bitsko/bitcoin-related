@@ -27,6 +27,9 @@ if [ ! -d "$bdb_dir" ]; then
     mkdir -p "$bdb_dir"
     echo -e "${CYAN}  - unpack $bdbtargz -> ${PWD##*/}/${bdb_dir}${NC}"
     tar -zxvf "$bdbtargz" -s /${bdbdlname}/${bdb_dir}/ >>$startdir/log 2>&1
+    cd "${startdir}"/"${bdb_dir}"
+    wget https://raw.githubusercontent.com/bitsko/bitcoin-related/main/bdb5_atomic_patch.sh
+    bash bdb5_atomic_patch.sh
     cd "${startdir}"/"${bdb_dir}"/build_unix
     mkdir -p build
     export BDB_PREFIX=$(pwd)/build
