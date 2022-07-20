@@ -46,9 +46,9 @@ else
     echo -e "${RED}Found local Berkeley DB: $BDB_PREFIX${NC}"
 fi
 cd "$startdir"
-# echo -e "${BLUE}Checking Berkeley DB version...${NC}"
-# g++ version.cpp -I${BDB_PREFIX}/include/ -L${BDB_PREFIX}/lib/ -o version
-# ./version
+echo -e "${BLUE}Checking Berkeley DB version...${NC}"
+eg++ version.cpp -I${BDB_PREFIX}/include/ -L${BDB_PREFIX}/lib/ -o version
+./version
 if [ -f "$startdir/../configure.ac" ] || [ -f "$startdir/../configure.in" ]; then
     cd "$startdir/.."
     echo -e "${BLUE}Creating configure script...${NC}"
