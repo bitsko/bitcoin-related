@@ -6,8 +6,4 @@ cd db-5.3.28/build_unix
 
 ../dist/configure
 
-mkdir build
-
-cd build
-
-../make
+make install
