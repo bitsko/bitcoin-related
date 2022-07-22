@@ -1,8 +1,8 @@
+	# https://github.com/dogecoin/dogecoin/blob/master/doc/build-openbsd.md
 	boost_url="https://sourceforge.net/projects/boost/files/boost/1.61.0/"
 	boost_pwd="${PWD}"
 	boost_dir="${boost_pwd}/boost_1_61_0"
 	boost_tgz="${boost_dir}.tar.gz"
-	
 	boost_ins="${boost_pwd}/boost"
 	mkdir -p $boost_ins
 	if [[ ! -f "$boost_tgz" ]]; then
@@ -21,7 +21,6 @@
 	else
 		tar -zxvf "$boost_tgz -C ${boost_dir}/"
 	fi
-
 	cd "$boost_dir"
 	echo 'using gcc : : g++ : <cxxflags>"-fvisibility=hidden -fPIC" <linkflags>"" <archiver>"ar" <striper>"strip"  <ranlib>"ranlib" <rc>"" : ;' > user-config.jam
 	boost_opt="runtime-link=shared threadapi=pthread threading=multi link=static variant=release --layout=tagged --build-type=complete --user-config=user-config.jam -sNO_BZIP2=1"
