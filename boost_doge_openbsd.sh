@@ -4,7 +4,7 @@ BOOST_PREFIX="${BITCOIN_ROOT}/boost"
 mkdir -p $BOOST_PREFIX
 
 wget https://github.com/boostorg/boost/archive/refs/tags/boost-1.79.0.tar.gz
-tar -xjf boost-1.79.0.tar.gz
+tar -zxvf boost-1.79.0.tar.gz
 
 cd boost-boost-1.79.0
 
